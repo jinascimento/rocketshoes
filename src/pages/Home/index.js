@@ -1,91 +1,45 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { mdAddShoppingCart } from 'react-icons/md';
 import { ProductList } from './styles';
+import api from '../../services/api';
+import { formatPrice } from '../../util/format';
 
-const Home = () => {
-  return (
-    <ProductList>
-      <li>
-        <img src="https://static.netshoes.com.br/produtos/tenis-adidas-vs-advantage-clean-masculino/14/D13-8970-014/D13-8970-014_detalhe2.jpg?ims=326x" alt="Tênis"/>
-        <strong>Tênis muito legal</strong>
-        <span>R$ 129,90</span>
+export default class Home extends Component {
+  state = {
+    products: [],
+  };
 
-        <button type="button">
-          <div>
-            <mdAddShoppingCart size={16} color="#FFF" /> 3
-          </div>
+  async componentDidMount() {
+    const response = await api.get('products');
+    const data = response.data.map(product => ({
+      ...product,
+      priceFormatted: formatPrice(product.price),
+    }));
 
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img src="https://static.netshoes.com.br/produtos/tenis-adidas-vs-advantage-clean-masculino/14/D13-8970-014/D13-8970-014_detalhe2.jpg?ims=326x" alt="Tênis"/>
-        <strong>Tênis muito legal</strong>
-        <span>R$ 129,90</span>
+    this.setState({ products: data });
+  }
 
-        <button type="button">
-          <div>
-            <mdAddShoppingCart size={16} color="#FFF" /> 3
-          </div>
+  render() {
+    const { products } = this.state;
 
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img src="https://static.netshoes.com.br/produtos/tenis-adidas-vs-advantage-clean-masculino/14/D13-8970-014/D13-8970-014_detalhe2.jpg?ims=326x" alt="Tênis"/>
-        <strong>Tênis muito legal</strong>
-        <span>R$ 129,90</span>
+    return (
+      <ProductList>
+        {products.map(product => (
+          <li key={product.id}>
+            <img src={product.image} alt={product.title} />
+            <strong>{product.title}</strong>
+            <span>{product.priceFormatted}</span>
 
-        <button type="button">
-          <div>
-            <mdAddShoppingCart size={16} color="#FFF" /> 3
-          </div>
+            <button type="button">
+              <div>
+                <mdAddShoppingCart size={16} color="#FFF" /> 3
+              </div>
 
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img src="https://static.netshoes.com.br/produtos/tenis-adidas-vs-advantage-clean-masculino/14/D13-8970-014/D13-8970-014_detalhe2.jpg?ims=326x" alt="Tênis"/>
-        <strong>Tênis muito legal</strong>
-        <span>R$ 129,90</span>
-
-        <button type="button">
-          <div>
-            <mdAddShoppingCart size={16} color="#FFF" /> 3
-          </div>
-
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img src="https://static.netshoes.com.br/produtos/tenis-adidas-vs-advantage-clean-masculino/14/D13-8970-014/D13-8970-014_detalhe2.jpg?ims=326x" alt="Tênis"/>
-        <strong>Tênis muito legal</strong>
-        <span>R$ 129,90</span>
-
-        <button type="button">
-          <div>
-            <mdAddShoppingCart size={16} color="#FFF" /> 3
-          </div>
-
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img src="https://static.netshoes.com.br/produtos/tenis-adidas-vs-advantage-clean-masculino/14/D13-8970-014/D13-8970-014_detalhe2.jpg?ims=326x" alt="Tênis"/>
-        <strong>Tênis muito legal</strong>
-        <span>R$ 129,90</span>
-
-        <button type="button">
-          <div>
-            <mdAddShoppingCart size={16} color="#FFF" /> 3
-          </div>
-
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-
-    </ProductList>
-  );
-};
-
-export default Home;
+              <span>ADICIONAR AO CARRINHO</span>
+            </button>
+          </li>
+        ))}
+      </ProductList>
+    );
+  }
+}
