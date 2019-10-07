@@ -10,13 +10,13 @@ import {
 } from 'react-icons/md';
 import { formatPrice } from '../../util/format';
 
-const Cart = ({ cart, total, removeFromCart, updateAmount }) => {
+const Cart = ({ cart, total, removeFromCart, updateAmountRequest }) => {
   function increment(product) {
-    updateAmount(product.id, product.amount + 1);
+    updateAmountRequest(product.id, product.amount + 1);
   }
 
   function decrement(product) {
-    updateAmount(product.id, product.amount - 1);
+    updateAmountRequest(product.id, product.amount - 1);
   }
 
   return (
